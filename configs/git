@@ -1,0 +1,5 @@
+[user]
+	name = Friedrich Wessel
+	email = mail@friedrichwessel.de
+[alias]
+	log-tree = log --all --graph --decorate --oneline --simplify-by-decoration
