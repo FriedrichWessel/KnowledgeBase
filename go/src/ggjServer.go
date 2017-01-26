@@ -4,7 +4,11 @@ import "net/http"
 import "fmt"
 import "github.com/gorilla/websocket"
 
-var upgrader = websocket.Upgrader{}
+var upgrader = websocket.Upgrader{
+  CheckOrigin: func(r *http.Request) bool {
+        return true
+    },
+}
 
 
 func main(){
@@ -15,9 +19,18 @@ func main(){
 
 func wsPage(response http.ResponseWriter, request *http.Request){
   conn, err := upgrader.Upgrade(response, request, nil)
-  _, msg, err = conn.ReadMessage()
   if err != nil {
-    fmt.Printf("Something went wronk! " + err)
+    fmt.Println(err)
+    return
   }
-  fmt.Printf("Received Msg: " + msg)
+  msg_type, msg, read_err := conn.ReadMessage()
+  if read_err != nil {
+    fmt.Println(read_err)
+  }
+  fmt.Printf("Received Msg: " + string(msg[:]))
+  if read_err = conn.WriteMessage(msg_type, msg);
+  read_err != nil {
+      fmt.Println("Send error")
+       return
+   }
 }
